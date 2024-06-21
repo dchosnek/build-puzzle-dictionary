@@ -4,7 +4,7 @@ Building a dictionary to be used for multiple word-based puzzles
 
 ### This is work in progress!
 
-So far, I have scripts in multiple languages for pulling English words from a CSV containing blog articles. The CSV comes from Kaggle and is titled (Blog Authorship Corpus)[[kaggle.com](https://www.kaggle.com/datasets/rtatman/blog-authorship-corpus)]. It provides the full text from more than 600,000 blogs.
+So far, I have scripts in multiple languages for pulling English words from a CSV containing blog articles. The CSV comes from Kaggle and is titled [Blog Authorship Corpus](https://www.kaggle.com/datasets/rtatman/blog-authorship-corpus). It provides the full text from more than 600,000 blogs.
 
 Roughly, the flow of all of these scripts is:
 1. Import the CSV and operate only on the `text` column.
