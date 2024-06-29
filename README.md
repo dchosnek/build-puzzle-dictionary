@@ -27,4 +27,12 @@ These blogs are written by people with different styles. They use hyphens in the
 * SSSSSSSSLEEEPY
 * ZZZZZZZZZZ
 
+These people also *unintentionally* misspell words:
+
+* DIFFICLUT
+* DIFFICTULT
+* DIFFICUALT
+* DIFFICUILT
+* DIFFICUIT
+
 To avoid words like the above, I also added a regex check to reject words that have three or more consecutive identical characters. Words like `beee` would be rejected but `beekeeper` would not.
