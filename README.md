@@ -1,10 +1,19 @@
 # Build puzzle dictionary
 
-Building a dictionary to be used for multiple word-based puzzles
+Building a dictionary to be used for multiple word-based puzzles. The file `dictionary-verified.txt` contains over 60,000 English words (one per line) that have been verified by an online dictionary API.
 
-### This is work in progress!
+# Process for building the dictionary
 
-So far, I have scripts in multiple languages for pulling English words from a CSV containing blog articles. The CSV comes from Kaggle and is titled [Blog Authorship Corpus](https://www.kaggle.com/datasets/rtatman/blog-authorship-corpus). It provides the full text from more than 600,000 blogs.
+There are two main steps, both of which were lengthy.
+
+1. Extract words from a repository of blogs
+1. Determine which of those words are real English language words
+
+## Extract words from a repo of blogs
+
+There is a repo of blogs on Kaggle titled [Blog Authorship Corpus](https://www.kaggle.com/datasets/rtatman/blog-authorship-corpus). It provides the full text from more than 600,000 blogs. That is our source for English words.
+
+I have scripts in multiple languages for pulling English words from this CSV.
 
 Roughly, the flow of all of these scripts is:
 1. Import the CSV and operate only on the `text` column.
@@ -18,7 +27,9 @@ The regex replace I'm using is quite heavy-handed. Apostrophes, commas, and dash
 { 'HE', 'KICK', 'MY', 'S', 'SIDE' }
 ```
 
-"Sidekick" is a real word that should not be hyphenated, and this logic will not capture that word.
+"Sidekick" is a real word that should not be hyphenated, and this logic will not capture that word. The hope is that with over 600,000 blogs, the words "sidekick" will appear in another blog without the hyphen and it will be captured there.
+
+## Verify words are real words
 
 These blogs are written by people with different styles. They use hyphens in the wrong places, but they also intentionally misspell words for emphasis:
 
@@ -27,7 +38,7 @@ These blogs are written by people with different styles. They use hyphens in the
 * SSSSSSSSLEEEPY
 * ZZZZZZZZZZ
 
-These people also *unintentionally* misspell words:
+Authors also *unintentionally* misspell words:
 
 * DIFFICLUT
 * DIFFICTULT
@@ -35,4 +46,24 @@ These people also *unintentionally* misspell words:
 * DIFFICUILT
 * DIFFICUIT
 
-To avoid words like the above, I also added a regex check to reject words that have three or more consecutive identical characters. Words like `beee` would be rejected but `beekeeper` would not.
+None of the words extracted from the blogs can be trusted. Every word has to be searched in an online dictionary. The dictionary I'm using returns one of the following:
+
+* an empty list if the word does not even resemble a real word (example: `AAAARRRRGH`)
+* a definition if the word is a real word spelling correctly (example: `DIFFICULT`)
+* a list of alternative words if the word resembles a real word (example: `DIFFICLUT`)
+
+Here is an example of the list of alternatives provided for a misspelled word.
+
+```
+[
+    "difficult",
+    "difficulty",
+    "difficultly",
+    "diffident",
+    "difficulties",
+    "different",
+    "diffidently",
+    "diffusible",
+    "sufficient"
+]
+```
