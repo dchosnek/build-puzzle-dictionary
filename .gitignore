@@ -1,0 +1,5 @@
+node_modules/
+package-lock.json
+blogtext.csv
+*.txt
+.DS_Store
