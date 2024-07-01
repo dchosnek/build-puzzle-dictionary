@@ -1,3 +1,4 @@
+console.time("Script execution time");
 const fs = require('fs');
 const csv = require('csv-parser');
 
@@ -6,12 +7,11 @@ const pattern = /(.)\1\1/;
 
 function readCSV(filename, column, callback) {
     const uniqueWords = new Set();
-    let rowCount = 0;               // Counter for the number of rows processed
-    
+
     fs.createReadStream(filename)
         .pipe(csv())
         .on('data', (row) => {
-            
+
             // words are separated by a space
             const words = row[column].replace(/[^a-zA-Z]+/g, ' ').split(' ');
             words.forEach(word => {
@@ -21,13 +21,9 @@ function readCSV(filename, column, callback) {
                     uniqueWords.add(word.trim().toUpperCase());
                 }
             });
-            
-            // display a counter every 1000 rows
-            rowCount++;                 
-            if (rowCount % 1000 == 0) console.log(rowCount, uniqueWords.size);
         })
         .on('end', () => {
-            console.log('sorting...');
+            // sort the output
             callback(Array.from(uniqueWords).sort());
         });
 }
@@ -35,4 +31,5 @@ function readCSV(filename, column, callback) {
 // parse the CSV file and dump sorted results to a file
 readCSV('blogtext.csv', 'text', (uniqueWords) => {
     fs.writeFileSync('dictionary-js.txt', uniqueWords.join('\n'));
+    console.timeEnd("Script execution time");
 });
